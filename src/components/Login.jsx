@@ -41,7 +41,7 @@ onAuthStateChanged(firebaseAuth, (currentUser) => {
         <div className="button">
           <button onClick={handleLogin} >Login</button>
           <span>
-             have an account?
+            Don't have an account?
             <Link to="/signup"> Signup</Link>
           </span>
         </div>
