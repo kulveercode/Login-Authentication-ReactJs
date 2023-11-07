@@ -1,10 +1,23 @@
-import React from 'react'
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import React, { useState } from 'react'
 import styled from 'styled-components';
+import { firebaseAuth } from '../firebase-config';
+import { useNavigate } from 'react-router-dom';
 
 const User = () => {
+  const [user, setUser] = useState(undefined);
+  const navigate = useNavigate();
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if(currentUser) setUser(currentUser);
+    else navigate("/login");
+  });
+    
   return (
     <Section>
-      User
+      <div className="container">
+        <h1>Welcome {user?.email}</h1>
+        <button onClick={() => signOut(firebaseAuth)}>Sign out</button>
+      </div>
     </Section>
   )
 }

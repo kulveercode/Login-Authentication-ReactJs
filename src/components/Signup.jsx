@@ -1,13 +1,54 @@
-import React from 'react'
-import styled from 'styled-components';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { firebaseAuth } from "../firebase-config";
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSignin = async () => {
+      try {
+        await createUserWithEmailAndPassword (firebaseAuth, email, password)
+      } catch (error) {
+        console.log(error);
+      }
+  };
+
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if(currentUser) navigate("/");
+  });
+
+
   return (
     <Section>
-      Signup
-    </Section>  
-  )
-}
+      <div className="container">
+        <h1>Signup</h1>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <div className="button">
+          <button onClick={handleSignin} >Signup</button>
+          <span>
+            Already have an account?
+            <Link to="/login"> Login</Link>
+          </span>
+        </div>
+      </div>
+    </Section>
+  );
+};
 
 const Section = styled.section`
   height: 100vh;
@@ -68,6 +109,5 @@ const Section = styled.section`
     }
   }
 `;
-
 
 export default Signup;
